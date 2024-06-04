@@ -1,14 +1,13 @@
-import express from 'express';
+import app from './app.js';
+import { connectToDatabase } from './db/connection.js';
 
-const app = express();
-
-app.use(express.json());
-
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+const PORT = process.env.PORT || 5000;
+connectToDatabase().then(() => {
+  app.listen(PORT, () => {
+    console.log('Server is running on http://localhost:5000');
+  });
+}).catch((error) => {
+  console.log(error);
 });
 
-app.listen(5000, () => {
-  console.log('Server is running on http://localhost:5000');
-});
+
