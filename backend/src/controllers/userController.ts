@@ -1,7 +1,6 @@
 import User from "../models/User.js";
 import { Request, Response, NextFunction } from "express";
 import { hash, compare } from "bcrypt";
-import jwt from "jsonwebtoken";
 import { createToken } from "../utils/token.manager.js";
 import { COOKIE_NAME } from "../utils/constants.js";
 
@@ -41,7 +40,9 @@ export const userSignup = async (
       httpOnly: true,
       signed: true,
     });
-    return res.status(201).json({ message: "OK", id: user._id });
+    return res
+      .status(201)
+      .json({ message: "OK", name: user.name, email: user.email });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error.message });
@@ -68,7 +69,8 @@ export const userLogin = async (
       path: "/",
     });
     const token = createToken(user.id, user.email);
-    const expires = new Date(Date.now() + 7);
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
     res.cookie("auth_token", token, {
       path: "/",
       domain: "localhost",
@@ -77,7 +79,30 @@ export const userLogin = async (
       signed: true,
     });
     console.log(res.cookie);
-    return res.status(200).json({ message: "OK", user: user._id });
+    return res
+      .status(200)
+      .json({ message: "OK", name: user.name, email: user.email });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const verifyUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user = await User.findById(res.locals.jwtData.id);
+    if (!user) return res.status(401).json({ message: "User not found" });
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "OK", name: user.name, email: user.email });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error.message });

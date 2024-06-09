@@ -6,3 +6,11 @@ html, body{
   color: white;
   font-family: 'Roboto', sans-serif;
 }
+
+.MuiOutlinedInput-input-root, .MuiOutlinedInput-notchedOutline{
+  border-color: #4e4e4e !important;
+}
+
+.MuiInputBase-input.MuiOutlinedInput-input{
+  color: white;
+}

@@ -4,8 +4,8 @@ import {
   useContext,
   useState,
   useEffect,
-  Context,
 } from "react";
+import { checkAuthStatus, loginUser } from "../helpers/api";
 
 type IUser = {
   email: string;
@@ -16,7 +16,7 @@ type AuthContextType = {
   isLoggedIn: boolean;
   user: IUser | null;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<void>;
 };
 
@@ -27,14 +27,28 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Check if the user is already logged in
+    async function checkStatus() {
+      const data = await checkAuthStatus();
+      if (data) {
+        setIsLoggedIn(true);
+        setUser({ email: data.email, name: data.name });
+      }
+    }
+    checkStatus();
   }, []);
 
   const login = async (email: string, password: string) => {
     // Call the login API
     // If successful, set the user and token in the state
     // If unsuccessful, show an error message
+    const data = await loginUser(email, password);
+    console.log(data);
+    if (data) {
+      setIsLoggedIn(true);
+      setUser({ email: data.email, name: data.name });
+    }
   };
-  const logout = () => {
+  const logout = async () => {
     // Clear the user and token from the state
   };
   const signup = async (name: string, email: string, password: string) => {
