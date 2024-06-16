@@ -1,17 +1,21 @@
-import {body, ValidationChain, validationResult} from "express-validator";
-import {Request, Response, NextFunction} from "express";
+import { body, ValidationChain, validationResult } from "express-validator";
+import { Request, Response, NextFunction } from "express";
 
 export const loginValidator: ValidationChain[] = [
   body("email").trim().isEmail().withMessage("Email is required"),
   body("password")
     .notEmpty()
-    .isLength({min: 6})
+    .isLength({ min: 6 })
     .withMessage("Password should contain atleast 6 characters"),
 ];
 
 export const signupValidator: ValidationChain[] = [
   body("name").notEmpty().withMessage("Name is required"),
   ...loginValidator,
+];
+
+export const chatCompletionValidator: ValidationChain[] = [
+  body("message").notEmpty().withMessage("Message is required"),
 ];
 
 export const validate = (validations: ValidationChain[]) => {
@@ -22,6 +26,6 @@ export const validate = (validations: ValidationChain[]) => {
     }
     const errors = validationResult(req);
     if (errors.isEmpty()) return next();
-    return res.status(422).json({errors: errors.array()});
+    return res.status(422).json({ errors: errors.array() });
   };
 };
