@@ -11,8 +11,9 @@ function App() {
   const location = useLocation();
   return (
     <main>
-      {location.pathname === "/chat" ||
-        (location.pathname === "/" && <Header />)}
+      {(location.pathname === "/chat" || location.pathname === "/") && (
+        <Header />
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/chat" element={<Chat />} />
