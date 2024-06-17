@@ -5,7 +5,12 @@ import {
   useState,
   useEffect,
 } from "react";
-import { checkAuthStatus, loginUser } from "../helpers/api";
+import {
+  checkAuthStatus,
+  loginUser,
+  logoutUser,
+  signupUser,
+} from "../helpers/api";
 
 type IUser = {
   email: string;
@@ -49,12 +54,17 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   const logout = async () => {
-    // Clear the user and token from the state
+    await logoutUser();
+    setIsLoggedIn(false);
+    setUser(null);
+    window.location.reload();
   };
   const signup = async (name: string, email: string, password: string) => {
-    // Call the signup API
-    // If successful, set the user and token in the state
-    // If unsuccessful, show an error message
+    const data = await signupUser(name, email, password);
+    if (data) {
+      setUser({ email: data.email, name: data.name });
+      setIsLoggedIn(true);
+    }
   };
 
   const value = { isLoggedIn, user, login, logout, signup };

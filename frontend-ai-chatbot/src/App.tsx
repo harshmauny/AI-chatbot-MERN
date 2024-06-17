@@ -6,9 +6,11 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
   const location = useLocation();
+  const auth = useAuth();
   return (
     <main>
       {(location.pathname === "/chat" || location.pathname === "/") && (
@@ -16,7 +18,9 @@ function App() {
       )}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/chat" element={<Chat />} />
+        {auth?.isLoggedIn && auth?.user && (
+          <Route path="/chat" element={<Chat />} />
+        )}
         <Route path="/Login" element={<Login />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
