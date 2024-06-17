@@ -1,8 +1,9 @@
+import { useEffect } from "react";
 import {
+  CssBaseline,
   Box,
   Button,
   Container,
-  CssBaseline,
   Grid,
   Link,
   TextField,
@@ -30,6 +31,12 @@ const Login = () => {
       toast.error("Failed to log in", { id: "login" });
     }
   };
+
+  useEffect(() => {
+    if (auth?.user) {
+      return navigate("/chat");
+    }
+  }, [auth]);
 
   return (
     <Container maxWidth="xs">
