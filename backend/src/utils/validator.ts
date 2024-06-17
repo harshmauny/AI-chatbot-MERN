@@ -10,7 +10,8 @@ export const loginValidator: ValidationChain[] = [
 ];
 
 export const signupValidator: ValidationChain[] = [
-  body("name").notEmpty().withMessage("Name is required"),
+  body("first_name").notEmpty().withMessage("First name is required"),
+  body("last_name").notEmpty().withMessage("Last name is required"),
   ...loginValidator,
 ];
 

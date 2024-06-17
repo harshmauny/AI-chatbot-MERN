@@ -77,8 +77,8 @@ const ChatItem = ({
       }}
     >
       <Avatar sx={{ ml: "0", bgcolor: "black", color: "white" }}>
-        {auth?.user?.name[0]}
-        {auth?.user?.name.split(" ")[1][0]}
+        {auth?.user?.first_name[0].toUpperCase()}
+        {auth?.user?.last_name[0].toUpperCase()}
       </Avatar>
       <Box>
         {!messageBlocks && (

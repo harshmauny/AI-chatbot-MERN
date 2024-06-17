@@ -1,27 +1,44 @@
-import * as React from "react";
+import { useEffect } from "react";
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Link,
   Grid,
   Box,
   Typography,
   Container,
 } from "@mui/material";
+import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const email = data.get("email") as string;
+    const password = data.get("password") as string;
+    const first_name = data.get("firstName") as string;
+    const last_name = data.get("lastName") as string;
+    try {
+      toast.loading("Logging in...", { id: "signup" });
+      await auth?.signup({ first_name, last_name, email, password });
+      toast.success("Signed and Logged in successfully", { id: "signup" });
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+      toast.error("Failed to log in", { id: "signup" });
+    }
   };
+
+  useEffect(() => {
+    if (auth?.user) {
+      return navigate("/chat");
+    }
+  }, [auth]);
 
   return (
     <Container component="main" maxWidth="xs">

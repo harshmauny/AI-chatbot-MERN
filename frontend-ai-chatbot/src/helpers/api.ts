@@ -1,7 +1,8 @@
 import axios from "axios";
+import { LoginData, SignupData } from "../context/AuthContext";
 
-export const loginUser = async (email: string, password: string) => {
-  const response = await axios.post("/user/login", { email, password });
+export const loginUser = async (loginData: LoginData) => {
+  const response = await axios.post("/user/login", loginData);
   if (response.status !== 200) {
     throw new Error(response.data.message);
   }
@@ -52,12 +53,8 @@ export const logoutUser = async () => {
   return data;
 };
 
-export const signupUser = async (
-  name: string,
-  email: string,
-  password: string,
-) => {
-  const res = await axios.post("/user/signup", { name, email, password });
+export const signupUser = async (signupData: SignupData) => {
+  const res = await axios.post("/user/signup", signupData);
   if (res.status !== 201) {
     throw new Error("Unable to Signup");
   }

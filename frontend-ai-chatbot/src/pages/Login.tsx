@@ -23,7 +23,7 @@ const Login = () => {
     const password = data.get("password") as string;
     try {
       toast.loading("Logging in...", { id: "login" });
-      await auth?.login(email, password);
+      await auth?.login({ email, password });
       toast.success("Logged in successfully", { id: "login" });
       navigate("/");
     } catch (e) {

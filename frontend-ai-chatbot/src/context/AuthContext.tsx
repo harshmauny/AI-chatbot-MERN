@@ -14,15 +14,28 @@ import {
 
 type IUser = {
   email: string;
-  name: string;
+  first_name: string;
+  last_name: string;
+};
+
+export type SignupData = {
+  email: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+};
+
+export type LoginData = {
+  email: string;
+  password: string;
 };
 
 type AuthContextType = {
   isLoggedIn: boolean;
   user: IUser | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (loginData: LoginData) => Promise<void>;
   logout: () => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  signup: (signupData: SignupData) => Promise<void>;
 };
 
 const authContext = createContext<AuthContextType | null>(null);
@@ -36,21 +49,26 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       const data = await checkAuthStatus();
       if (data) {
         setIsLoggedIn(true);
-        setUser({ email: data.email, name: data.name });
+        setUser({
+          email: data.email,
+          first_name: data.first_name,
+          last_name: data.last_name,
+        });
       }
     }
     checkStatus();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    // Call the login API
-    // If successful, set the user and token in the state
-    // If unsuccessful, show an error message
-    const data = await loginUser(email, password);
+  const login = async (loginData: LoginData) => {
+    const data = await loginUser(loginData);
     console.log(data);
     if (data) {
       setIsLoggedIn(true);
-      setUser({ email: data.email, name: data.name });
+      setUser({
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+      });
     }
   };
   const logout = async () => {
@@ -59,10 +77,14 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     window.location.reload();
   };
-  const signup = async (name: string, email: string, password: string) => {
-    const data = await signupUser(name, email, password);
+  const signup = async (signupData: SignupData) => {
+    const data = await signupUser(signupData);
     if (data) {
-      setUser({ email: data.email, name: data.name });
+      setUser({
+        email: data.email,
+        first_name: data.first_name,
+        last_name: data.last_name,
+      });
       setIsLoggedIn(true);
     }
   };

@@ -24,15 +24,21 @@ export const userSignup = async (
   next: NextFunction,
 ) => {
   try {
-    const { name, email, password } = req.body;
+    const { first_name, last_name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser)
       return res.status(401).json({ message: "User already exists" });
     const hashedPassword = await hash(password, 10);
-    const user = new User({ name, email, password: hashedPassword });
+    const user = new User({
+      first_name,
+      last_name,
+      email,
+      password: hashedPassword,
+    });
     await user.save();
     const token = createToken(user.id, user.email);
-    const expires = new Date(Date.now() + 7);
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
     res.cookie("auth_token", token, {
       path: "/",
       domain: "localhost",
@@ -40,9 +46,12 @@ export const userSignup = async (
       httpOnly: true,
       signed: true,
     });
-    return res
-      .status(201)
-      .json({ message: "OK", name: user.name, email: user.email });
+    return res.status(201).json({
+      message: "OK",
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error.message });
@@ -79,9 +88,12 @@ export const userLogin = async (
       signed: true,
     });
     console.log(res.cookie);
-    return res
-      .status(200)
-      .json({ message: "OK", name: user.name, email: user.email });
+    return res.status(200).json({
+      message: "OK",
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error.message });
@@ -100,9 +112,12 @@ export const verifyUser = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    return res
-      .status(200)
-      .json({ message: "OK", name: user.name, email: user.email });
+    return res.status(200).json({
+      message: "OK",
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: error.message });
@@ -131,9 +146,12 @@ export const userLogout = async (
       path: "/",
     });
 
-    return res
-      .status(200)
-      .json({ message: "OK", name: user.name, email: user.email });
+    return res.status(200).json({
+      message: "OK",
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+    });
   } catch (error) {
     console.log(error);
     return res.status(200).json({ message: "ERROR", cause: error.message });
