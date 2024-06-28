@@ -13,14 +13,8 @@ function App() {
   const auth = useAuth();
   return (
     <main>
-      {(location.pathname === "/chat" || location.pathname === "/") && (
-        <Header />
-      )}
       <Routes>
-        <Route path="/" element={<Home />} />
-        {auth?.isLoggedIn && auth?.user && (
-          <Route path="/chat" element={<Chat />} />
-        )}
+        <Route path="/" element={<Chat />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />

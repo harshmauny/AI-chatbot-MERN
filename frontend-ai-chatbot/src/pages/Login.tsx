@@ -34,7 +34,7 @@ const Login = () => {
 
   useEffect(() => {
     if (auth?.user) {
-      return navigate("/chat");
+      return navigate("/");
     }
   }, [auth]);
 
@@ -67,7 +67,7 @@ const Login = () => {
             id="email"
             label="Email Address"
             name="email"
-            autoComplete="email"
+            autoComplete="off"
             autoFocus
             sx={{ color: "white" }}
           />
