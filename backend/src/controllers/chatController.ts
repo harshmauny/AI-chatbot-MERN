@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/User.js";
-import { OpenAIConfig } from "../config/openai-config.js";
-import { ChatCompletionRequestMessage, OpenAIApi } from "openai";
+import { CohereConfig } from "../config/cohere-config.js";
 
 export const generateChatCompletion = async (
   req: Request,
@@ -14,16 +13,19 @@ export const generateChatCompletion = async (
     if (!user) return res.status(404).json({ message: "User not found" });
     const chats = user.chats.map(({ role, content }) => ({
       role,
-      content,
-    })) as ChatCompletionRequestMessage[];
-    chats.push({ content: message, role: "user" });
-    const config = OpenAIConfig();
-    const openai = new OpenAIApi(config);
-    const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: chats,
+      message: content,
+    })) as any[];
+    const config = CohereConfig();
+    const completion = await config.chat({
+      model: "command-r-plus",
+      chatHistory: chats,
+      message: message,
     });
-    user.chats.push(completion.data.choices[0].message);
+    const updatedChat = completion.chatHistory.map(({ role, message }) => ({
+      role,
+      content: message,
+    }));
+    user.chats = updatedChat as any;
     await user.save();
     return res.status(200).json({ message: "OK", chats: user.chats });
   } catch (error) {
