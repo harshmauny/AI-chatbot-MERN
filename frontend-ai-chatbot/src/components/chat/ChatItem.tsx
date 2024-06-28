@@ -31,70 +31,117 @@ const ChatItem = ({
   role,
 }: {
   content: string;
-  role: "user" | "assistant";
+  role: "USER" | "CHATBOT";
 }) => {
   const messageBlocks = extractCodeFromString(content);
   const auth = useAuth();
-  return role == "assistant" ? (
+  return role == "CHATBOT" ? (
     <Box
       sx={{
         display: "flex",
-        p: 2,
-        bgcolor: "#004d5612",
         gap: 2,
-        borderRadius: 2,
-        my: 1,
+        p: 2,
+        justifyContent: "flex-start",
+        fontSize: "16px",
       }}
     >
-      <Avatar sx={{ ml: "0" }}>
-        <img src="openai.png" alt="openai" width={"30px"} />
-      </Avatar>
-      <Box>
-        {!messageBlocks && (
-          <Typography sx={{ fontSize: "20px" }}>{content}</Typography>
-        )}
-        {messageBlocks &&
-          messageBlocks.length &&
-          messageBlocks.map((block) =>
-            isCodeBlock(block) ? (
-              <SyntaxHighlighter style={coldarkDark} language="javascript">
-                {block}
-              </SyntaxHighlighter>
-            ) : (
-              <Typography sx={{ fontSize: "20px" }}>{block}</Typography>
-            ),
+      <Box
+        sx={{
+          maxWidth: "70%",
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <img
+          src="chatgpt_logo_white.png"
+          alt=""
+          width={"30px"}
+          height={"30px"}
+          className="image-inverted"
+        />
+        <Box>
+          {!messageBlocks && (
+            <Typography
+              sx={{
+                fontSize: "14px",
+                bgcolor: "#2f2f2f",
+                borderRadius: "1.5rem",
+                p: 2,
+              }}
+            >
+              {content}
+            </Typography>
           )}
+          {messageBlocks &&
+            messageBlocks.length &&
+            messageBlocks.map((block) =>
+              isCodeBlock(block) ? (
+                <SyntaxHighlighter style={coldarkDark} language="javascript">
+                  {block}
+                </SyntaxHighlighter>
+              ) : (
+                <Typography sx={{ fontSize: "14px" }}>{block}</Typography>
+              ),
+            )}
+        </Box>
       </Box>
     </Box>
   ) : (
     <Box
       sx={{
         display: "flex",
-        p: 2,
-        bgcolor: "#004d56",
         gap: 2,
-        borderRadius: 2,
+        p: 2,
+        justifyContent: "flex-end",
+        fontSize: "16px",
       }}
     >
-      <Avatar sx={{ ml: "0", bgcolor: "black", color: "white" }}>
-        {auth?.user?.first_name[0].toUpperCase()}
-        {auth?.user?.last_name[0].toUpperCase()}
-      </Avatar>
-      <Box>
-        {!messageBlocks && (
-          <Typography sx={{ fontSize: "20px" }}>{content}</Typography>
-        )}
-        {messageBlocks &&
-          messageBlocks.length &&
-          messageBlocks.map((block) =>
-            isCodeBlock(block) ? (
-              <SyntaxHighlighter style={coldarkDark} language="javascript">
-                {block}
-              </SyntaxHighlighter>
-            ) : (
-              <Typography sx={{ fontSize: "20px" }}>{block}</Typography>
-            ),
+      <Box
+        sx={{
+          maxWidth: "70%",
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <Box>
+          {!messageBlocks && (
+            <Typography
+              sx={{
+                fontSize: "14px",
+                bgcolor: "#2f2f2f",
+                borderRadius: "1.5rem",
+                p: 2,
+              }}
+            >
+              {content}
+            </Typography>
           )}
+          {messageBlocks &&
+            messageBlocks.length &&
+            messageBlocks.map((block) =>
+              isCodeBlock(block) ? (
+                <SyntaxHighlighter style={coldarkDark} language="javascript">
+                  {block}
+                </SyntaxHighlighter>
+              ) : (
+                <Typography sx={{ fontSize: "14px" }}>{block}</Typography>
+              ),
+            )}
+        </Box>
+        <Avatar
+          sx={{
+            ml: "0",
+            bgcolor: "white",
+            color: "black",
+            fontWeight: 600,
+            fontSize: "16px",
+          }}
+        >
+          {auth?.user?.first_name[0].toUpperCase()}
+          {auth?.user?.last_name[0].toUpperCase()}
+        </Avatar>
       </Box>
     </Box>
   );
