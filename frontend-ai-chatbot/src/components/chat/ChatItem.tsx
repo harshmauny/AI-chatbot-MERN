@@ -47,28 +47,39 @@ const ChatItem = ({
     >
       <Box
         sx={{
-          maxWidth: "70%",
+          maxWidth: "90%",
           display: "flex",
           alignItems: "center",
           gap: 2,
         }}
       >
-        <img
-          src="chatgpt_logo_white.png"
-          alt=""
-          width={"30px"}
-          height={"30px"}
-          className="image-inverted"
-          style={{ alignSelf: "flex-start" }}
-        />
+        <div
+          style={{
+            borderRadius: "9999px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            alignSelf: "flex-start",
+            outline: "solid 1px #424242",
+
+            padding: "4px",
+          }}
+        >
+          <img
+            src="chatgpt_logo_white.png"
+            alt=""
+            width={"26px"}
+            height={"26px"}
+            className="image-inverted"
+          />
+        </div>
         <Box>
           {!messageBlocks && (
             <Typography
               sx={{
                 fontSize: "14px",
-                bgcolor: "#2f2f2f",
                 borderRadius: "1.5rem",
-                p: 2,
+                p: "10px 16px",
                 color: "#ececec",
               }}
             >
@@ -114,7 +125,7 @@ const ChatItem = ({
                 fontSize: "14px",
                 bgcolor: "#2f2f2f",
                 borderRadius: "1.5rem",
-                p: 2,
+                p: "10px 16px",
                 color: "#ececec",
               }}
             >
@@ -133,19 +144,6 @@ const ChatItem = ({
               ),
             )}
         </Box>
-        <Avatar
-          sx={{
-            ml: "0",
-            bgcolor: "white",
-            color: "black",
-            fontWeight: 600,
-            fontSize: "16px",
-            alignSelf: "flex-start",
-          }}
-        >
-          {auth?.user?.first_name[0].toUpperCase()}
-          {auth?.user?.last_name[0].toUpperCase()}
-        </Avatar>
       </Box>
     </Box>
   );
