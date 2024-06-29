@@ -59,6 +59,7 @@ const ChatItem = ({
           width={"30px"}
           height={"30px"}
           className="image-inverted"
+          style={{ alignSelf: "flex-start" }}
         />
         <Box>
           {!messageBlocks && (
@@ -68,6 +69,7 @@ const ChatItem = ({
                 bgcolor: "#2f2f2f",
                 borderRadius: "1.5rem",
                 p: 2,
+                color: "#ececec",
               }}
             >
               {content}
@@ -113,6 +115,7 @@ const ChatItem = ({
                 bgcolor: "#2f2f2f",
                 borderRadius: "1.5rem",
                 p: 2,
+                color: "#ececec",
               }}
             >
               {content}
@@ -137,6 +140,7 @@ const ChatItem = ({
             color: "black",
             fontWeight: 600,
             fontSize: "16px",
+            alignSelf: "flex-start",
           }}
         >
           {auth?.user?.first_name[0].toUpperCase()}
