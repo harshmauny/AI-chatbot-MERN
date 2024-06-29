@@ -5,6 +5,7 @@ html, body{
   background: #212121;
   color: white;
   font-family: 'Roboto', sans-serif;
+  scrollbar-color: #686868 #424242;
 }
 
 body::-webkit-scrollbar-track{
