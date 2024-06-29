@@ -149,145 +149,162 @@ const Chat = () => {
           display: "flex",
           flex: { md: 1, xs: 1, sm: 1 },
           flexDirection: "column",
+          position: "relative",
+          overflowY: "auto",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            zIndex: 10,
-            px: 2,
-          }}
-        >
-          <Typography
+        <Box sx={{ position: "relative", overflowY: "auto" }}>
+          <Box
             sx={{
-              fontSize: "16px",
-              color: "#b4b4b4",
-              fontWeight: "600",
-            }}
-          >
-            Model - GPT 3.5 Turbo
-          </Typography>
-          <>
-            <Avatar
-              sx={{
-                my: 2,
-                bgcolor: "white",
-                color: "black",
-                fontWeight: 600,
-                fontSize: "16px",
-              }}
-              component={Typography}
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-            >
-              {auth?.user?.first_name[0]?.toUpperCase()}
-              {auth?.user?.last_name[0]?.toUpperCase()}
-            </Avatar>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              sx={{
-                "& .MuiPaper-root": {
-                  backgroundColor: "#2f2f2f",
-                  color: "white",
-                  borderColor: "hsla(0,0%,100%,.1) !important",
-                },
-              }}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={auth?.logout}>
-                <ListItemIcon>
-                  <Logout fontSize="small" sx={{ color: "white" }} />
-                </ListItemIcon>
-                Logout
-              </MenuItem>
-            </Menu>
-          </>
-        </Box>
-
-        <Box
-          sx={{
-            width: "100%",
-            height: "100vh",
-            flex: "1 1 0%",
-            borderRadius: 3,
-            mx: "auto",
-            display: "flex",
-            flexDirection: "column",
-            overflow: "scroll",
-            overflowX: "hidden",
-            overflowY: "auto",
-            scrollBehavior: "smooth",
-          }}
-        >
-          {chatMessages.length > 0 &&
-            chatMessages.map((chat, index) => (
-              //@ts-ignore
-              <ChatItem content={chat.content} role={chat.role} key={index} />
-            ))}
-          {chatMessages.length <= 0 && (
-            <Box
-              sx={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <img
-                src="chatgpt_logo_white.png"
-                alt=""
-                width={"50px"}
-                height={"50px"}
-                className="image-inverted"
-              />
-            </Box>
-          )}
-        </Box>
-        <Box
-          sx={{
-            backgroundColor: "#2f2f2f",
-            display: "flex",
-            m: "20px",
-            borderRadius: "26px",
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              minWidth: 0,
               display: "flex",
+              justifyContent: "space-between",
               alignItems: "center",
-              flex: "1 1 0%",
-              paddingLeft: "10px",
+              zIndex: 10,
+              px: 2,
+              position: "sticky",
+              top: 0,
+              backgroundColor: "#212121",
             }}
           >
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="Type a message..."
+            <Typography
+              sx={{
+                fontSize: "16px",
+                color: "#b4b4b4",
+                fontWeight: "600",
+              }}
+            >
+              Model - GPT 3.5 Turbo
+            </Typography>
+            <>
+              <Avatar
+                sx={{
+                  my: 2,
+                  bgcolor: "white",
+                  color: "black",
+                  fontWeight: 600,
+                  fontSize: "16px",
+                }}
+                component={Typography}
+                aria-controls={open ? "basic-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleClick}
+              >
+                {auth?.user?.first_name[0]?.toUpperCase()}
+                {auth?.user?.last_name[0]?.toUpperCase()}
+              </Avatar>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                sx={{
+                  "& .MuiPaper-root": {
+                    backgroundColor: "#2f2f2f",
+                    color: "white",
+                    borderColor: "hsla(0,0%,100%,.1) !important",
+                  },
+                }}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem onClick={auth?.logout}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" sx={{ color: "white" }} />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </Menu>
+            </>
+          </Box>
+
+          <Box
+            sx={{
+              width: "100%",
+              height: "100vh",
+              flex: "1 1 0%",
+              borderRadius: 3,
+              mx: "auto",
+              display: "flex",
+              flexDirection: "column",
+              maxWidth: "700px",
+              scrollBehavior: "smooth",
+            }}
+          >
+            {chatMessages.length > 0 &&
+              chatMessages.map((chat, index) => (
+                //@ts-ignore
+                <ChatItem content={chat.content} role={chat.role} key={index} />
+              ))}
+            {chatMessages.length <= 0 && (
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <img
+                  src="chatgpt_logo_white.png"
+                  alt=""
+                  width={"50px"}
+                  height={"50px"}
+                  className="image-inverted"
+                />
+              </Box>
+            )}
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: "#212121",
+            position: "sticky",
+            bottom: 0,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              m: "20px",
+              width: "100%",
+              maxWidth: "700px",
+              bgcolor: "#2f2f2f",
+              borderRadius: "26px",
+            }}
+          >
+            <div
               style={{
                 width: "100%",
-                backgroundColor: "#2f2f2f",
-                border: "none",
-                outline: "none",
-                color: "white",
-                fontSize: "15px",
+                minWidth: 0,
+                display: "flex",
+                alignItems: "center",
+                flex: "1 1 0%",
+                paddingLeft: "10px",
               }}
-            />
-          </div>
-          <IconButton onClick={handleSubmit} sx={{ color: "white", mx: 1 }}>
-            <IoMdSend />
-          </IconButton>
+            >
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="Type a message..."
+                style={{
+                  width: "100%",
+                  backgroundColor: "#2f2f2f",
+                  border: "none",
+                  outline: "none",
+                  color: "white",
+                  fontSize: "15px",
+                }}
+              />
+            </div>
+            <IconButton onClick={handleSubmit} sx={{ color: "white", mx: 1 }}>
+              <IoMdSend />
+            </IconButton>
+          </Box>
         </Box>
       </Box>
     </Box>
