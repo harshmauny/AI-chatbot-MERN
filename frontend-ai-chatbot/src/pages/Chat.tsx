@@ -34,7 +34,8 @@ const Chat = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
     const content = inputRef.current?.value as string;
     if (inputRef && inputRef.current) {
       inputRef.current.value = "";
@@ -133,9 +134,9 @@ const Chat = () => {
                 fontWeight: "700",
                 borderRadius: 3,
                 mx: "auto",
-                bgcolor: red[300],
+                bgcolor: "#10a37f",
                 ":hover": {
-                  bgcolor: red.A400,
+                  bgcolor: "#10a37f",
                 },
               }}
             >
@@ -182,7 +183,9 @@ const Chat = () => {
                   bgcolor: "white",
                   color: "black",
                   fontWeight: 600,
-                  fontSize: "16px",
+                  fontSize: "14px",
+                  width: "30px",
+                  height: "30px",
                 }}
                 component={Typography}
                 aria-controls={open ? "basic-menu" : undefined}
@@ -222,7 +225,7 @@ const Chat = () => {
           <Box
             sx={{
               width: "100%",
-              height: "100vh",
+              height: "78vh",
               flex: "1 1 0%",
               borderRadius: 3,
               mx: "auto",
@@ -284,22 +287,24 @@ const Chat = () => {
                 display: "flex",
                 alignItems: "center",
                 flex: "1 1 0%",
-                paddingLeft: "10px",
+                paddingLeft: "15px",
               }}
             >
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Type a message..."
-                style={{
-                  width: "100%",
-                  backgroundColor: "#2f2f2f",
-                  border: "none",
-                  outline: "none",
-                  color: "white",
-                  fontSize: "15px",
-                }}
-              />
+              <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Type a message..."
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#2f2f2f",
+                    border: "none",
+                    outline: "none",
+                    color: "white",
+                    fontSize: "15px",
+                  }}
+                />
+              </form>
             </div>
             <IconButton onClick={handleSubmit} sx={{ color: "white", mx: 1 }}>
               <IoMdSend />

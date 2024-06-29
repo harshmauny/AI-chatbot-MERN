@@ -33,6 +33,7 @@ export type LoginData = {
 type AuthContextType = {
   isLoggedIn: boolean;
   user: IUser | null;
+  loading: boolean;
   login: (loginData: LoginData) => Promise<void>;
   logout: () => Promise<void>;
   signup: (signupData: SignupData) => Promise<void>;
@@ -42,18 +43,25 @@ const authContext = createContext<AuthContextType | null>(null);
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [user, setUser] = useState<IUser | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // Check if the user is already logged in
     async function checkStatus() {
-      const data = await checkAuthStatus();
-      if (data) {
-        setIsLoggedIn(true);
-        setUser({
-          email: data.email,
-          first_name: data.first_name,
-          last_name: data.last_name,
-        });
+      try {
+        setLoading(true);
+        const data = await checkAuthStatus();
+        if (data) {
+          setIsLoggedIn(true);
+          setUser({
+            email: data.email,
+            first_name: data.first_name,
+            last_name: data.last_name,
+          });
+        }
+      } catch (error) {
+      } finally {
+        setLoading(false);
       }
     }
     checkStatus();
@@ -89,7 +97,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const value = { isLoggedIn, user, login, logout, signup };
+  const value = { isLoggedIn, user, login, logout, signup, loading };
 
   return <authContext.Provider value={value}>{children}</authContext.Provider>;
 };
