@@ -7,6 +7,11 @@ html, body{
   font-family: 'Roboto', sans-serif;
 }
 
+body::-webkit-scrollbar-track{
+  background: #212121;
+
+}
+
 .MuiOutlinedInput-input-root, .MuiOutlinedInput-notchedOutline{
   border-color: #4e4e4e !important;
 }
