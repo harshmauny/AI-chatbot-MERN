@@ -21,9 +21,9 @@ export const generateChatCompletion = async (
       chatHistory: chats,
       message: message,
     });
-    const updatedChat = completion.chatHistory.map(({ role, message }) => ({
-      role,
-      content: message,
+    const updatedChat = completion.chatHistory.map((item: any) => ({
+      role: item.role,
+      content: item.message,
     }));
     user.chats = updatedChat as any;
     await user.save();
