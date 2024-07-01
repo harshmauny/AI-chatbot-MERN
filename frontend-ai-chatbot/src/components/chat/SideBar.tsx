@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 import { deleteUserChats } from "../../helpers/api";
 import { Message } from "../../pages/Chat";
 import MenuIcon from "@mui/icons-material/Menu";
-import { IoMdSend } from "react-icons/io";
 
 type SideBarProps = {
   setChatMessages: React.Dispatch<React.SetStateAction<Message[]>>;
@@ -12,10 +11,6 @@ type SideBarProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const SideBar = ({ setChatMessages, open, setOpen }: SideBarProps) => {
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
   const handleDrawerClose = () => {
     setOpen(false);
   };

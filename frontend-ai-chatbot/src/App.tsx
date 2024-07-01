@@ -1,8 +1,6 @@
 import "./App.css";
 import { Routes, Route, useLocation } from "react-router-dom";
-import Header from "./components/Header";
 import Chat from "./pages/Chat";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
@@ -10,7 +8,6 @@ import { CircularProgress } from "@mui/material";
 import { useAuth } from "./context/AuthContext";
 
 function App() {
-  const location = useLocation();
   const auth = useAuth();
   if (auth?.loading)
     return (

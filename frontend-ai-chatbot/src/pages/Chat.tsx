@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { deleteUserChats, getUserChats } from "../helpers/api";
+import { getUserChats } from "../helpers/api";
 import toast from "react-hot-toast";
 import ChatPannelComponent from "../components/chat/ChatPannelComponent";
 import SideBar from "../components/chat/SideBar";
