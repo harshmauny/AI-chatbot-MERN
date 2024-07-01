@@ -1,62 +1,20 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  Box,
-  Avatar,
-  Typography,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-} from "@mui/material";
-import Logout from "@mui/icons-material/Logout";
-import red from "@mui/material/colors/red";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Box } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
-import ChatItem from "../components/chat/ChatItem";
-import { IoMdSend } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { deleteUserChats, getUserChats, sendChatRequest } from "../helpers/api";
+import { deleteUserChats, getUserChats } from "../helpers/api";
 import toast from "react-hot-toast";
-type Message = {
+import ChatPannelComponent from "../components/chat/ChatPannelComponent";
+import SideBar from "../components/chat/SideBar";
+export type Message = {
   role: "user" | "assistant";
   content: string;
 };
 const Chat = () => {
   const navigate = useNavigate();
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const auth = useAuth();
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    const content = inputRef.current?.value as string;
-    if (inputRef && inputRef.current) {
-      inputRef.current.value = "";
-    }
-    const newMessage: Message = { role: "user", content };
-    setChatMessages((prev) => [...prev, newMessage]);
-    const chatData = await sendChatRequest(content);
-    setChatMessages([...chatData.chats]);
-    //
-  };
-  const handleDeleteChats = async () => {
-    try {
-      toast.loading("Deleting Chats", { id: "deletechats" });
-      await deleteUserChats();
-      setChatMessages([]);
-      toast.success("Deleted Chats Successfully", { id: "deletechats" });
-    } catch (error) {
-      console.log(error);
-      toast.error("Deleting chats failed", { id: "deletechats" });
-    }
-  };
+  const [open, setOpen] = React.useState(false);
   useLayoutEffect(() => {
     if (auth?.isLoggedIn && auth.user) {
       toast.loading("Loading Chats", { id: "loadchats" });
@@ -85,233 +43,17 @@ const Chat = () => {
         height: "100%",
       }}
     >
-      <Box
-        sx={{
-          display: { md: "flex", xs: "none", sm: "none" },
-          width: "260px",
-          flexShrink: 0,
-          flexDirection: "column",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            width: "100%",
-            height: "100vh",
-            bgcolor: "#171717",
-            flexDirection: "column",
-          }}
-        >
-          <Typography sx={{ mx: "auto", fontFamily: "work sans", mt: 3 }}>
-            You are talking to a ChatBOT
-          </Typography>
-          <Typography
-            sx={{
-              mx: "auto",
-              fontFamily: "work sans",
-              my: 2,
-              p: 3,
-              flex: "1 1 0%",
-              overflowY: "auto",
-            }}
-          >
-            You can ask some questions related to Knowledge, Business, Advices,
-            Education, etc. But avoid sharing personal information
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              py: 2,
-            }}
-          >
-            <Button
-              onClick={handleDeleteChats}
-              sx={{
-                width: "200px",
-                color: "white",
-                fontWeight: "700",
-                borderRadius: 3,
-                mx: "auto",
-                bgcolor: "#10a37f",
-                ":hover": {
-                  bgcolor: "#10a37f",
-                },
-              }}
-            >
-              Clear Conversation
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flex: { md: 1, xs: 1, sm: 1 },
-          flexDirection: "column",
-          position: "relative",
-          overflowY: "auto",
-        }}
-      >
-        <Box sx={{ position: "relative", overflowY: "auto" }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              zIndex: 10,
-              px: 2,
-              position: "sticky",
-              top: 0,
-              backgroundColor: "#212121",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "16px",
-                color: "#b4b4b4",
-                fontWeight: "600",
-              }}
-            >
-              Model - GPT 3.5 Turbo
-            </Typography>
-            <>
-              <Avatar
-                sx={{
-                  my: 2,
-                  bgcolor: "white",
-                  color: "black",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  width: "30px",
-                  height: "30px",
-                }}
-                component={Typography}
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-              >
-                {auth?.user?.first_name[0]?.toUpperCase()}
-                {auth?.user?.last_name[0]?.toUpperCase()}
-              </Avatar>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                sx={{
-                  "& .MuiPaper-root": {
-                    backgroundColor: "#2f2f2f",
-                    color: "white",
-                    borderColor: "hsla(0,0%,100%,.1) !important",
-                  },
-                }}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem onClick={auth?.logout}>
-                  <ListItemIcon>
-                    <Logout fontSize="small" sx={{ color: "white" }} />
-                  </ListItemIcon>
-                  Logout
-                </MenuItem>
-              </Menu>
-            </>
-          </Box>
-
-          <Box
-            sx={{
-              width: "100%",
-              height: "78vh",
-              flex: "1 1 0%",
-              borderRadius: 3,
-              mx: "auto",
-              display: "flex",
-              flexDirection: "column",
-              maxWidth: "700px",
-              scrollBehavior: "smooth",
-            }}
-          >
-            {chatMessages.length > 0 &&
-              chatMessages.map((chat, index) => (
-                //@ts-ignore
-                <ChatItem content={chat.content} role={chat.role} key={index} />
-              ))}
-            {chatMessages.length <= 0 && (
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <img
-                  src="chatgpt_logo_white.png"
-                  alt=""
-                  width={"50px"}
-                  height={"50px"}
-                  className="image-inverted"
-                />
-              </Box>
-            )}
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            backgroundColor: "#212121",
-            position: "sticky",
-            bottom: 0,
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              m: "20px",
-              width: "100%",
-              maxWidth: "700px",
-              bgcolor: "#2f2f2f",
-              borderRadius: "26px",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                minWidth: 0,
-                display: "flex",
-                alignItems: "center",
-                flex: "1 1 0%",
-                paddingLeft: "15px",
-              }}
-            >
-              <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="Type a message..."
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#2f2f2f",
-                    border: "none",
-                    outline: "none",
-                    color: "white",
-                    fontSize: "15px",
-                  }}
-                />
-              </form>
-            </div>
-            <IconButton onClick={handleSubmit} sx={{ color: "white", mx: 1 }}>
-              <IoMdSend />
-            </IconButton>
-          </Box>
-        </Box>
-      </Box>
+      <SideBar
+        setChatMessages={setChatMessages}
+        open={open}
+        setOpen={setOpen}
+      />
+      <ChatPannelComponent
+        chatMessages={chatMessages}
+        setChatMessages={setChatMessages}
+        sidebarOpen={open}
+        setOpen={setOpen}
+      />
     </Box>
   );
 };
