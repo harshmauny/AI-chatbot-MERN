@@ -5,13 +5,12 @@ import {
   Button,
   Container,
   Grid,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const auth = useAuth();
@@ -91,9 +90,7 @@ const Login = () => {
             Sign In
           </Button>
           <Grid item sx={{ display: "flex", justifyContent: "center" }}>
-            <Link href="#" variant="body2">
-              {"Don't have an account? Sign Up"}
-            </Link>
+            <Link to="/SignUp">{"Don't have an account? Sign Up"}</Link>
           </Grid>
         </Box>
       </Box>

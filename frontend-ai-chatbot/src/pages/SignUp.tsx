@@ -3,7 +3,6 @@ import {
   Button,
   CssBaseline,
   TextField,
-  Link,
   Grid,
   Box,
   Typography,
@@ -11,7 +10,7 @@ import {
 } from "@mui/material";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function SignUp() {
   const auth = useAuth();
@@ -110,16 +109,13 @@ export default function SignUp() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, backgroundColor: "#10a37f" }}
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
+
+          <Grid item sx={{ display: "flex", justifyContent: "center" }}>
+            <Link to="/Login">Already have an account? Sign in</Link>
           </Grid>
         </Box>
       </Box>
