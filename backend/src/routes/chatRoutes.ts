@@ -4,18 +4,23 @@ import { chatCompletionValidator, validate } from "../utils/validator.js";
 import {
   deleteChats,
   generateChatCompletion,
+  getAllChats,
   sendChatsToUser,
+  getChatById,
+  createNewChat,
 } from "../controllers/chatController.js";
 
 const chatRouter = Router();
 
 chatRouter.post(
-  "/new",
+  "/chat-completion",
   validate(chatCompletionValidator),
   verifyToken,
   generateChatCompletion,
 );
-chatRouter.get("/all-chats", verifyToken, sendChatsToUser);
-chatRouter.delete("/delete", verifyToken, deleteChats);
+chatRouter.post("/new-chat", verifyToken, createNewChat);
+chatRouter.get("/all-chats", verifyToken, getAllChats);
+chatRouter.get("/chat", verifyToken, getChatById);
+chatRouter.delete("/delete/:id", verifyToken, deleteChats);
 
 export default chatRouter;

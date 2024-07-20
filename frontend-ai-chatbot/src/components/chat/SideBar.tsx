@@ -1,28 +1,66 @@
 import React from "react";
-import { Box, Typography, Button, IconButton, Drawer } from "@mui/material";
+import { Box, Button, IconButton, Drawer } from "@mui/material";
 import toast from "react-hot-toast";
-import { deleteUserChats } from "../../helpers/api";
+import { createNewChat, deleteUserChats } from "../../helpers/api";
 import { Message } from "../../pages/Chat";
 import MenuIcon from "@mui/icons-material/Menu";
+import AddIcon from "@mui/icons-material/Add";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 type SideBarProps = {
   setChatMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  chatMessages: Message[];
+  currentChatId: string | null;
+  setCurrentChatId: React.Dispatch<React.SetStateAction<string | null>>;
 };
-const SideBar = ({ setChatMessages, open, setOpen }: SideBarProps) => {
+const SideBar = ({
+  setChatMessages,
+  open,
+  setOpen,
+  currentChatId,
+  chatMessages,
+  setCurrentChatId,
+}: SideBarProps) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
   const handleDeleteChats = async () => {
     try {
       toast.loading("Deleting Chats", { id: "deletechats" });
-      await deleteUserChats();
-      setChatMessages([]);
+      const res = await deleteUserChats(currentChatId);
+
+      const updatedChats = [...chatMessages].filter((chat) => {
+        return chat._id !== currentChatId;
+      });
+      if (updatedChats.length === 0) {
+        const response = await createNewChat();
+        setChatMessages(response.chats);
+        setCurrentChatId(response.chatId);
+      } else {
+        setChatMessages(updatedChats);
+        setCurrentChatId(updatedChats[0]._id);
+      }
       toast.success("Deleted Chats Successfully", { id: "deletechats" });
     } catch (error) {
       console.log(error);
       toast.error("Deleting chats failed", { id: "deletechats" });
+    }
+  };
+  const handleNewChat = async () => {
+    try {
+      toast.loading("Creating New Chat", { id: "newchat" });
+      const res = await createNewChat();
+      const sortedChats = [...res.chats].sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
+      setChatMessages(sortedChats);
+      setCurrentChatId(res.chatId);
+      toast.success("Chat Created Successfully", { id: "newchat" });
+    } catch (error) {
+      console.log(error);
+      toast.error("Creating new chat failed", { id: "newchat" });
     }
   };
   return (
@@ -64,23 +102,76 @@ const SideBar = ({ setChatMessages, open, setOpen }: SideBarProps) => {
             <IconButton onClick={handleDrawerClose} sx={{ color: "white" }}>
               <MenuIcon />
             </IconButton>
+            <IconButton onClick={handleNewChat} sx={{ color: "white" }}>
+              <AddIcon />
+            </IconButton>
           </Box>
-          <Typography sx={{ mx: "auto", fontFamily: "work sans", mt: 3 }}>
-            You are talking to a ChatBOT
-          </Typography>
-          <Typography
+          <Box
             sx={{
-              mx: "auto",
-              fontFamily: "work sans",
-              my: 2,
-              p: 3,
+              display: "flex",
+              flexDirection: "column",
               flex: "1 1 0%",
+              width: "100%",
               overflowY: "auto",
             }}
           >
-            You can ask some questions related to Knowledge, Business, Advices,
-            Education, etc. But avoid sharing personal information
-          </Typography>
+            {chatMessages &&
+              chatMessages.map((chat) => (
+                <Button
+                  key={chat._id}
+                  id="chat-id-button"
+                  sx={{
+                    mx: "auto",
+                    width: "90%",
+                    fontFamily: "work sans",
+                    gap: 2,
+                    px: 2,
+                    borderRadius: 3,
+                    color: "white",
+                    backgroundColor:
+                      chat._id === currentChatId ? "#212121" : "",
+                    ":hover": {
+                      backgroundColor: "#212121",
+                    },
+                    position: "relative",
+                  }}
+                  onClick={() => setCurrentChatId(chat._id)}
+                >
+                  <div
+                    style={{
+                      width: "100%",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                      display: "flex",
+                      justifyContent: "left",
+                      textTransform: "none",
+                    }}
+                  >
+                    {chat.chatName}
+                  </div>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "right",
+                      position: "absolute",
+                      right: 8,
+                      width: "45px",
+                      visibility:
+                        chat._id === currentChatId ? "visible" : "hidden",
+                      background:
+                        "linear-gradient(to left, #212121 60%, transparent )",
+                      "#chat-id-button:hover & ": {
+                        visibility: "visible",
+                      },
+                    }}
+                  >
+                    <MoreHorizIcon />
+                  </Box>
+                </Button>
+              ))}
+          </Box>
           <Box
             sx={{
               display: "flex",

@@ -12,16 +12,18 @@ import {
 import { IoMdSend } from "react-icons/io";
 import Logout from "@mui/icons-material/Logout";
 import { useAuth } from "../../context/AuthContext";
-import { Message } from "../../pages/Chat";
+import { Conversation, Message } from "../../pages/Chat";
 import ChatItem from "../../components/chat/ChatItem";
 import { sendChatRequest } from "../../helpers/api";
 import MenuIcon from "@mui/icons-material/Menu";
+import { all } from "axios";
 
 type ChatPannelComponentProps = {
   chatMessages: Message[];
   setChatMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   sidebarOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  currentChatId: string | null;
 };
 
 const drawerWidth = 280;
@@ -45,6 +47,7 @@ const Main = styled("div", { shouldForwardProp: (prop) => prop !== "open" })<{
 }));
 
 const ChatPannelComponent = ({
+  currentChatId,
   chatMessages,
   setChatMessages,
   sidebarOpen,
@@ -72,9 +75,14 @@ const ChatPannelComponent = ({
     if (inputRef && inputRef.current) {
       inputRef.current.value = "";
     }
-    const newMessage: Message = { role: "user", content };
-    setChatMessages((prev) => [...prev, newMessage]);
-    const chatData = await sendChatRequest(content);
+    const allChats = [...chatMessages];
+    const newMessage: Conversation = { role: "USER", content };
+    const currentChat = chatMessages.findIndex(
+      (chat) => chat._id === currentChatId,
+    );
+    allChats[currentChat].conversation.push(newMessage);
+    setChatMessages(allChats);
+    const chatData = await sendChatRequest(content, currentChatId);
     setChatMessages([...chatData.chats]);
 
     scrollToBottom();
@@ -185,10 +193,16 @@ const ChatPannelComponent = ({
             }}
           >
             {chatMessages.length > 0 &&
-              chatMessages.map((chat, index) => (
-                //@ts-ignore
-                <ChatItem content={chat.content} role={chat.role} key={index} />
-              ))}
+              chatMessages
+                .find((chat) => chat._id == currentChatId)
+                ?.conversation.map((chat, index) => (
+                  //@ts-ignore
+                  <ChatItem
+                    content={chat.content}
+                    role={chat.role}
+                    key={index}
+                  />
+                ))}
             {chatMessages.length <= 0 && (
               <Box
                 sx={{

@@ -9,6 +9,14 @@ export const loginUser = async (loginData: LoginData) => {
   return await response.data;
 };
 
+export const createNewChat = async () => {
+  const response = await axios.post("/chat/new-chat");
+  if (response.status !== 200) {
+    throw new Error(response.data.message);
+  }
+  return await response.data;
+};
+
 export const checkAuthStatus = async () => {
   const response = await axios.get("/user/auth-status");
   if (response.status !== 200) {
@@ -17,8 +25,8 @@ export const checkAuthStatus = async () => {
   return await response.data;
 };
 
-export const sendChatRequest = async (message: string) => {
-  const res = await axios.post("/chat/new", { message });
+export const sendChatRequest = async (message: string, id: string | null) => {
+  const res = await axios.post("/chat/chat-completion", { message, id });
   if (res.status !== 200) {
     throw new Error("Unable to send chat");
   }
@@ -35,8 +43,8 @@ export const getUserChats = async () => {
   return data;
 };
 
-export const deleteUserChats = async () => {
-  const res = await axios.delete("/chat/delete");
+export const deleteUserChats = async (id: string | null) => {
+  const res = await axios.delete(`/chat/delete/${id}`);
   if (res.status !== 200) {
     throw new Error("Unable to delete chats");
   }

@@ -34,6 +34,7 @@ export const userSignup = async (
       last_name,
       email,
       password: hashedPassword,
+      chats: [{ conversation: [], chatName: "New Chat" }],
     });
     await user.save();
     const token = createToken(user.id, user.email);
