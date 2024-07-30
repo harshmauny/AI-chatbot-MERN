@@ -1,10 +1,16 @@
 
 # AI chatbot
 
-A AI Chatbot app created using the MERN stack using Cohere API. 
+An AI Chatbot app created using the MERN stack + vite integrtaed Cohere API. 
+- Engage in a conversational state with AI.
+- Generate multiple chats
+- formatted Code snippets
+- login and signup to save your chats
 
 ## Screenshots
 
+![chat screen](https://github.com/user-attachments/assets/2d801ac9-b4bb-4f98-ab29-5ae4a7b7cf70)
+![login screen](https://github.com/user-attachments/assets/8a86457c-af5a-473f-bba0-7f5e319e6fbe)
 
 
 ## Environment Variables
