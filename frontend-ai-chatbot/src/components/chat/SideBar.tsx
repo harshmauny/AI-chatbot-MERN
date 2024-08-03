@@ -231,7 +231,7 @@ const SideBar = ({
                       onClick={handleDeleteChats}
                       disableRipple
                       sx={{
-                        mx: "12px",
+                        mx: "10px",
                         ":hover": {
                           bgcolor: "#424242",
 
@@ -259,10 +259,9 @@ const SideBar = ({
                       onClick={handleClose}
                       disableRipple
                       sx={{
-                        mx: "12px",
+                        mx: "10px",
                         ":hover": {
                           bgcolor: "#424242",
-
                           borderRadius: 3,
                         },
                       }}
@@ -270,7 +269,7 @@ const SideBar = ({
                       <ListItemIcon>
                         <DriveFileRenameOutlineIcon
                           fontSize="small"
-                          sx={{ color: "#db4c42" }}
+                          sx={{ color: "white" }}
                         />
                       </ListItemIcon>
                       <ListItemText
