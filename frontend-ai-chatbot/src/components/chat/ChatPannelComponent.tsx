@@ -16,7 +16,6 @@ import { Conversation, Message } from "../../pages/Chat";
 import ChatItem from "../../components/chat/ChatItem";
 import { sendChatRequest } from "../../helpers/api";
 import MenuIcon from "@mui/icons-material/Menu";
-import { all } from "axios";
 
 type ChatPannelComponentProps = {
   chatMessages: Message[];
@@ -192,7 +191,13 @@ const ChatPannelComponent = ({
               scrollBehavior: "smooth",
             }}
           >
-            {chatMessages.length > 0 &&
+            {/* {console.log(chatMessages)} */}
+            {chatMessages &&
+              (
+                chatMessages.find(
+                  (chat) => chat._id == currentChatId,
+                ) as Message
+              ).conversation.length > 0 &&
               chatMessages
                 .find((chat) => chat._id == currentChatId)
                 ?.conversation.map((chat, index) => (
@@ -203,25 +208,30 @@ const ChatPannelComponent = ({
                     key={index}
                   />
                 ))}
-            {chatMessages.length <= 0 && (
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <img
-                  src="chatgpt_logo_white.png"
-                  alt=""
-                  width={"50px"}
-                  height={"50px"}
-                  className="image-inverted"
-                />
-              </Box>
-            )}
+            {chatMessages &&
+              (
+                chatMessages.find(
+                  (chat) => chat._id == currentChatId,
+                ) as Message
+              ).conversation.length <= 0 && (
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img
+                    src="chatgpt_logo_white.png"
+                    alt=""
+                    width={"50px"}
+                    height={"50px"}
+                    className="image-inverted"
+                  />
+                </Box>
+              )}
             <div ref={messagesEndRef} />
           </Box>
         </Box>
