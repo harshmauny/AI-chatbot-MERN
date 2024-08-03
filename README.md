@@ -9,7 +9,7 @@ An AI Chatbot app created using the MERN stack + vite integrtaed Cohere API.
 
 ## Screenshots
 
-![chat screen](https://github.com/user-attachments/assets/2d801ac9-b4bb-4f98-ab29-5ae4a7b7cf70)
+![chat screen](![image](https://github.com/user-attachments/assets/e43932f3-d713-481f-b2b4-044d6480daf1)
 ![login screen](https://github.com/user-attachments/assets/8a86457c-af5a-473f-bba0-7f5e319e6fbe)
 
 
