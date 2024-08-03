@@ -1,11 +1,21 @@
 import React from "react";
-import { Box, Button, IconButton, Drawer } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Drawer,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import toast from "react-hot-toast";
 import { createNewChat, deleteUserChats } from "../../helpers/api";
 import { Message } from "../../pages/Chat";
 import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type SideBarProps = {
   setChatMessages: React.Dispatch<React.SetStateAction<Message[]>>;
@@ -23,6 +33,14 @@ const SideBar = ({
   chatMessages,
   setCurrentChatId,
 }: SideBarProps) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -42,6 +60,7 @@ const SideBar = ({
         setChatMessages(updatedChats);
         setCurrentChatId(updatedChats[0]._id);
       }
+      handleClose();
       toast.success("Deleted Chats Successfully", { id: "deletechats" });
     } catch (error) {
       console.log(error);
@@ -135,6 +154,7 @@ const SideBar = ({
                     },
                     position: "relative",
                   }}
+                  disableRipple
                   onClick={() => setCurrentChatId(chat._id)}
                 >
                   <div
@@ -154,7 +174,7 @@ const SideBar = ({
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "right",
+                      justifyContent: "end",
                       position: "absolute",
                       right: 8,
                       width: "45px",
@@ -167,35 +187,99 @@ const SideBar = ({
                       },
                     }}
                   >
-                    <MoreHorizIcon />
+                    <Button
+                      id="basic-button"
+                      aria-controls={openMenu ? "basic-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={openMenu ? "true" : undefined}
+                      onClick={handleClick}
+                      disableRipple
+                      sx={{
+                        justifyContent: "end",
+                        color: "white",
+                        ":hover": {
+                          bgcolor: "transparent",
+                        },
+                        "&:focus": {
+                          bgcolor: "transparent",
+                        },
+                      }}
+                    >
+                      <MoreHorizIcon />
+                    </Button>
                   </Box>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={openMenu}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
+                    }}
+                    sx={{
+                      "& .MuiMenu-paper": {
+                        backgroundColor: "#2f2f2f",
+                        borderRadius: 3,
+                        "& :after": {
+                          border: "0 solid #e3e3e3",
+                        },
+                      },
+                    }}
+                  >
+                    <MenuItem
+                      onClick={handleDeleteChats}
+                      disableRipple
+                      sx={{
+                        mx: "12px",
+                        ":hover": {
+                          bgcolor: "#424242",
+
+                          borderRadius: 3,
+                        },
+                      }}
+                    >
+                      <ListItemIcon>
+                        <DeleteIcon
+                          fontSize="small"
+                          sx={{ color: "#db4c42" }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        sx={{
+                          "& .MuiTypography-root": {
+                            color: "#db4c42 !important",
+                          },
+                        }}
+                      >
+                        Delete
+                      </ListItemText>
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleClose}
+                      disableRipple
+                      sx={{
+                        mx: "12px",
+                        ":hover": {
+                          bgcolor: "#424242",
+
+                          borderRadius: 3,
+                        },
+                      }}
+                    >
+                      <ListItemText
+                        sx={{
+                          "& .MuiTypography-root": {
+                            color: "white",
+                          },
+                        }}
+                        inset
+                      >
+                        Rename
+                      </ListItemText>
+                    </MenuItem>
+                  </Menu>
                 </Button>
               ))}
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              py: 2,
-            }}
-          >
-            <Button
-              onClick={handleDeleteChats}
-              sx={{
-                width: "200px",
-                color: "white",
-                fontWeight: "700",
-                borderRadius: 3,
-                mx: "auto",
-                bgcolor: "#10a37f",
-                ":hover": {
-                  bgcolor: "#10a37f",
-                },
-              }}
-            >
-              Clear Conversation
-            </Button>
           </Box>
         </Box>
       </Box>
