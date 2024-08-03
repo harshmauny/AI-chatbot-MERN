@@ -16,6 +16,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 
 type SideBarProps = {
   setChatMessages: React.Dispatch<React.SetStateAction<Message[]>>;
@@ -266,13 +267,18 @@ const SideBar = ({
                         },
                       }}
                     >
+                      <ListItemIcon>
+                        <DriveFileRenameOutlineIcon
+                          fontSize="small"
+                          sx={{ color: "#db4c42" }}
+                        />
+                      </ListItemIcon>
                       <ListItemText
                         sx={{
                           "& .MuiTypography-root": {
                             color: "white",
                           },
                         }}
-                        inset
                       >
                         Rename
                       </ListItemText>
