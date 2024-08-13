@@ -191,13 +191,12 @@ const ChatPannelComponent = ({
               scrollBehavior: "smooth",
             }}
           >
-            {/* {console.log(chatMessages)} */}
             {chatMessages &&
               (
-                chatMessages.find(
+                chatMessages?.find(
                   (chat) => chat._id == currentChatId,
                 ) as Message
-              ).conversation.length > 0 &&
+              )?.conversation?.length > 0 &&
               chatMessages
                 .find((chat) => chat._id == currentChatId)
                 ?.conversation.map((chat, index) => (
@@ -210,10 +209,10 @@ const ChatPannelComponent = ({
                 ))}
             {chatMessages &&
               (
-                chatMessages.find(
+                chatMessages?.find(
                   (chat) => chat._id == currentChatId,
                 ) as Message
-              ).conversation.length <= 0 && (
+              )?.conversation?.length <= 0 && (
                 <Box
                   sx={{
                     width: "100%",
