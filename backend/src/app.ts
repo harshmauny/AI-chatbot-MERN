@@ -9,7 +9,12 @@ config({ path: ".env" });
 const COOKIE_SECRET = process.env.COOKIE_SECRET;
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+const corsOptions = {
+  origin: ["http://localhost:8080"],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser(COOKIE_SECRET));
 app.use(morgan("dev"));

@@ -4,12 +4,14 @@ import { Request, Response, NextFunction } from "express";
 export const createToken = (
   id: string,
   email: string,
-  expiresIn?: string | number,
+  expiresIn: string | number = 1800,
 ) => {
   const payload = { email, id };
-  return jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: expiresIn || process.env.JWT_EXPIRE_TIME,
-  });
+  const secret = process.env.JWT_SECRET as string;
+  // const expire: string | number | undefined =
+  expiresIn ?? process.env.JWT_EXPIRE_TIME;
+
+  return jwt.sign(payload, secret);
 };
 
 export const verifyToken = (

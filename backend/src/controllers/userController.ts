@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import { Request, Response, NextFunction } from "express";
-import { hash, compare } from "bcrypt";
+import { hash, compare } from "bcryptjs";
 import { createToken } from "../utils/token.manager.js";
 import { COOKIE_NAME } from "../utils/constants.js";
 

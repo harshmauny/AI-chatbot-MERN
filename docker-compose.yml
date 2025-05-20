@@ -1,0 +1,44 @@
+services:
+  # mongoDB service
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    env_file:
+      - ./backend/.env
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    env_file:
+      - ./backend/.env
+    stdin_open: true
+    volumes:
+      - /app/node_modules
+
+  frontend:
+    build:
+      context: ./frontend-ai-chatbot
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    # env_file:
+    #   - ./frontend-ai-chatbot/.env
+    stdin_open: true
+    volumes:
+      - /app/node_modules
+# Define volumes
+volumes:
+  mongo_data:
+    driver: local
