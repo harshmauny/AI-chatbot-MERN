@@ -7,17 +7,21 @@ import {
   verifyUser,
 } from "../controllers/userController.js";
 import {
+  signupValidation,
+  loginValidation,
   validate,
-  signupValidator,
-  loginValidator,
-} from "../utils/validator.js";
+} from "../middleware/validation.js";
 import { verifyToken } from "../utils/token.manager.js";
+import { authLimiter } from "../middleware/security.js";
 
 const userRouter = Router();
 
-userRouter.get("/", getAllUsers);
-userRouter.post("/signup", validate(signupValidator), userSignup);
-userRouter.post("/login", validate(loginValidator), userLogin);
+// Public routes
+userRouter.post("/signup", authLimiter, signupValidation, validate, userSignup);
+userRouter.post("/login", authLimiter, loginValidation, validate, userLogin);
+
+// Protected routes
+userRouter.get("/", verifyToken, getAllUsers);
 userRouter.get("/auth-status", verifyToken, verifyUser);
 userRouter.get("/logout", verifyToken, userLogout);
 

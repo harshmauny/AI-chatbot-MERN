@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyToken } from "../utils/token.manager.js";
-import { chatCompletionValidator, validate } from "../utils/validator.js";
+import { chatMessageValidation, validate } from "../middleware/validation.js";
 import {
   deleteChats,
   generateChatCompletion,
@@ -9,18 +9,24 @@ import {
   getChatById,
   createNewChat,
 } from "../controllers/chatController.js";
+import { chatLimiter } from "../middleware/security.js";
 
 const chatRouter = Router();
 
+// All chat routes require authentication
+chatRouter.use(verifyToken);
+
+// Chat operations
 chatRouter.post(
   "/chat-completion",
-  validate(chatCompletionValidator),
-  verifyToken,
+  chatLimiter,
+  chatMessageValidation,
+  validate,
   generateChatCompletion,
 );
-chatRouter.post("/new-chat", verifyToken, createNewChat);
-chatRouter.get("/all-chats", verifyToken, getAllChats);
-chatRouter.get("/chat", verifyToken, getChatById);
-chatRouter.delete("/delete/:id", verifyToken, deleteChats);
+chatRouter.post("/new-chat", createNewChat);
+chatRouter.get("/all-chats", getAllChats);
+chatRouter.get("/chat/:id", getChatById);
+chatRouter.delete("/delete/:id", deleteChats);
 
 export default chatRouter;
